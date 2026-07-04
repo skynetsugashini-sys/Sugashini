@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sugashini Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#000;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar{
+    width:10px;
+}
+::-webkit-scrollbar-track{
+    background:#0a0a0a;
+}
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(180deg, gold, #b8860b);
+    border-radius:10px;
+}
+
+/* Loader */
+.loader{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+    transition:opacity 0.8s ease, visibility 0.8s ease;
+}
+.loader-text{
+    font-size:3rem;
+    color:gold;
+    letter-spacing:4px;
+    animation:glow 1.2s infinite alternate;
+}
+.loader.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+/* Cursor Glow */
+.cursor-glow{
+    position:fixed;
+    width:400px;
+    height:400px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,215,0,0.06), transparent 70%);
+    pointer-events:none;
+    z-index:0;
+    transform:translate(-50%,-50%);
+    transition:opacity 0.3s;
+}
+
+/* Animated Stars */
+.stars{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+.star{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:white;
+    border-radius:50%;
+    animation:twinkle 3s infinite;
+}
+
+@keyframes twinkle{
+    0%,100%{opacity:0.2;}
+    50%{opacity:1;}
+}
+
+/* Navbar */
+nav{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:100;
+    display:flex;
+    justify-content:center;
+    gap:clamp(10px, 3vw, 35px);
+    padding:18px 10px;
+    background:rgba(0,0,0,0.55);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(255,215,0,0.15);
+    flex-wrap:wrap;
+}
+
+nav a{
+    color:#eee;
+    text-decoration:none;
+    font-size:0.85rem;
+    font-weight:500;
+    letter-spacing:0.5px;
+    position:relative;
+    padding:4px 2px;
+    transition:color 0.3s;
+    white-space:nowrap;
+}
+
+nav a::after{
+    content:'';
+    position:absolute;
+    bottom:-2px;
+    left:0;
+    width:0%;
+    height:2px;
+    background:gold;
+    transition:width 0.3s ease;
+}
+
+nav a:hover{
+    color:gold;
+}
+
+nav a:hover::after{
+    width:100%;
+}
+
+/* Hero Section */
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+    position:relative;
+}
+
+.avatar{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    background:linear-gradient(135deg, gold, #b8860b);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:3rem;
+    font-weight:700;
+    color:#000;
+    margin-bottom:25px;
+    box-shadow:0 0 25px rgba(255,215,0,0.5), 0 0 60px rgba(255,215,0,0.25);
+    animation:floatAvatar 4s ease-in-out infinite;
+}
+
+@keyframes floatAvatar{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+h1{
+    font-size:clamp(2.5rem, 8vw, 4rem);
+    background:linear-gradient(90deg, #fff6d0, gold, #b8860b, gold);
+    background-size:300% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 0 30px rgba(255,215,0,0.4);
+    animation:shine 4s linear infinite, glow 2s infinite alternate;
+    letter-spacing:2px;
+}
+
+@keyframes shine{
+    to{background-position:300% center;}
+}
+
+@keyframes glow{
+    from{filter:drop-shadow(0 0 8px rgba(255,215,0,0.5));}
+    to{filter:drop-shadow(0 0 22px rgba(255,215,0,0.8));}
+}
+
+.subtitle{
+    margin-top:15px;
+    font-size:1.3rem;
+    color:#ddd;
+}
+
+.typed-line{
+    margin-top:12px;
+    font-size:1.1rem;
+    color:gold;
+    min-height:1.6rem;
+    font-weight:500;
+}
+
+.typed-line .cursor-blink{
+    display:inline-block;
+    width:2px;
+    background:gold;
+    margin-left:3px;
+    animation:blink 0.8s infinite;
+}
+
+@keyframes blink{
+    0%,50%{opacity:1;}
+    51%,100%{opacity:0;}
+}
+
+.scroll-hint{
+    position:absolute;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#888;
+    font-size:0.8rem;
+    letter-spacing:1px;
+    animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+    0%,100%{transform:translate(-50%,0);}
+    50%{transform:translate(-50%,8px);}
+}
+
+.section{
+    width:90%;
+    max-width:1000px;
+    margin:auto;
+    padding:60px 20px;
+    position:relative;
+}
+
+.section-title{
+    text-align:center;
+    font-size:0.85rem;
+    letter-spacing:3px;
+    color:#b8860b;
+    text-transform:uppercase;
+    margin-bottom:10px;
+}
+
+.card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,215,0,0.3);
+    border-radius:20px;
+    padding:30px;
+    margin:20px 0;
+    backdrop-filter:blur(10px);
+    transition:transform 0.5s, box-shadow 0.5s;
+    opacity:0;
+    transform:translateY(40px);
+}
+
+.card.visible{
+    opacity:1;
+    transform:translateY(0);
+    transition:opacity 0.8s ease, transform 0.8s ease;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 0 25px rgba(255,215,0,0.4);
+}
+
+h2{
+    color:gold;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+p{
+    line-height:1.8;
+    color:#eee;
+}
+
+/* Stats */
+.stats-row{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-bottom:20px;
+}
+
+.stat-box{
+    flex:1;
+    min-width:140px;
+    text-align:center;
+    background:rgba(255,215,0,0.05);
+    border:1px solid rgba(255,215,0,0.25);
+    border-radius:14px;
+    padding:20px 10px;
+}
+
+.stat-number{
+    font-size:2rem;
+    font-weight:700;
+    color:gold;
+}
+
+.stat-label{
+    font-size:0.8rem;
+    color:#bbb;
+    margin-top:5px;
+    letter-spacing:0.5px;
+}
+
+/* Skills */
+.skills-grid{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.skill-item{
+    width:100%;
+}
+
+.skill-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:6px;
+    font-size:0.9rem;
+    color:#ddd;
+}
+
+.skill-bar{
+    width:100%;
+    height:8px;
+    background:rgba(255,255,255,0.08);
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.skill-fill{
+    height:100%;
+    background:linear-gradient(90deg, #b8860b, gold);
+    border-radius:10px;
+    width:0%;
+    transition:width 1.4s ease;
+    box-shadow:0 0 10px rgba(255,215,0,0.5);
+}
+
+/* Timeline */
+.timeline{
+    position:relative;
+    margin-left:10px;
+    padding-left:30px;
+    border-left:2px solid rgba(255,215,0,0.3);
+}
+
+.timeline-item{
+    position:relative;
+    margin-bottom:30px;
+}
+
+.timeline-item:last-child{
+    margin-bottom:0;
+}
+
+.timeline-dot{
+    position:absolute;
+    left:-39px;
+    top:2px;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:gold;
+    box-shadow:0 0 12px gold;
+}
+
+.timeline-year{
+    color:gold;
+    font-weight:600;
+    font-size:0.9rem;
+    letter-spacing:0.5px;
+}
+
+.timeline-item p{
+    margin-top:4px;
+}
+
+/* Heart Logo */
+
+.heart{
+    font-size:80px;
+    animation:heartbeat 1s infinite;
+}
+
+@keyframes heartbeat{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+
+/* Contact */
+.social-row{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+
+.social-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 22px;
+    border-radius:30px;
+    border:1px solid rgba(255,215,0,0.4);
+    color:gold;
+    text-decoration:none;
+    font-size:0.9rem;
+    font-weight:500;
+    transition:0.3s;
+    background:rgba(255,215,0,0.04);
+}
+
+.social-btn:hover{
+    background:gold;
+    color:#000;
+    box-shadow:0 0 20px rgba(255,215,0,0.5);
+    transform:translateY(-3px);
+}
+
+/* Footer */
+
+footer{
+    text-align:center;
+    padding:40px;
+    color:gold;
+    font-size:0.9rem;
+}
+
+.shooting-star{
+    position:absolute;
+    width:2px;
+    height:80px;
+    background:linear-gradient(white,transparent);
+    transform:rotate(45deg);
+    animation:shoot 5s linear infinite;
+}
+
+@keyframes shoot{
+    from{
+        top:-100px;
+        left:-100px;
+    }
+    to{
+        top:100%;
+        left:100%;
+    }
+}
+
+@media (max-width:600px){
+    nav{gap:14px;}
+    nav a{font-size:0.75rem;}
+    .stats-row{flex-direction:column;}
+}
+</style>
+
+</head>
+<body>
+
+<div class="loader" id="loader"><div class="loader-text">S.</div></div>
+
+<div class="stars" id="stars"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<nav>
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#skills">Skills</a>
+    <a href="#interests">Interests</a>
+    <a href="#dream">Dream</a>
+    <a href="#family">Family</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<section class="hero">
+    <div class="avatar">S</div>
+    <h1>SUGASHINI</h1>
+    <p class="subtitle">First Year B.Sc Information Technology Student ✨</p>
+    <p class="typed-line"><span id="typedText"></span><span class="cursor-blink">&nbsp;</span></p>
+    <div class="scroll-hint">↓ SCROLL DOWN</div>
+</section>
+
+<section class="section">
+
+<div class="card" id="about">
+    <h2>🚀 About Me</h2>
+    <p>
+        Hi! I'm Sugashini. I am studying First Year B.Sc Information Technology.
+        I am highly enthusiastic about learning technology and discovering new things.
+        This is my very first portfolio website and my first project created with the help of AI.
+    </p>
+</div>
+
+<div class="card" id="education">
+    <h2>📚 Education</h2>
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="stat-number">430/600</div>
+            <div class="stat-label">12TH STANDARD</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">340/500</div>
+            <div class="stat-label">10TH STANDARD</div>
+        </div>
+    </div>
+    <p>
+        I believe marks are only one part of success. Continuous learning,
+        hard work and dedication are what truly help us grow.
+    </p>
+</div>
+
+<div class="card" id="skills">
+    <h2>💻 Skills & Tools</h2>
+    <div class="skills-grid">
+        <div class="skill-item">
+            <div class="skill-top"><span>HTML</span><span>75%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-top"><span>CSS</span><span>65%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-width="65"></div></div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-top"><span>JavaScript</span><span>45%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-width="45"></div></div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-top"><span>Photography</span><span>70%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-width="70"></div></div>
+        </div>
+    </div>
+</div>
+
+<div class="card" id="interests">
+    <h2>📸 My Interests</h2>
+    <p>
+        I love Fashion Photography and learning about technology.
+        I enjoy exploring creativity and capturing beautiful moments.
+    </p>
+</div>
+
+<div class="card" id="dream">
+    <h2>🌟 My Dream</h2>
+    <p>
+        My dream is to become an innovative entrepreneur and technology leader.
+        Elon Musk inspires me because of his vision, determination and willingness
+        to build futuristic technologies that can change the world.
+    </p>
+    <div class="timeline" style="margin-top:25px;">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">NOW</div>
+            <p>Learning the fundamentals of IT and building my first projects.</p>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">NEXT FEW YEARS</div>
+            <p>Mastering web development and exploring entrepreneurship.</p>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">THE DREAM</div>
+            <p>Building innovative technology as a founder and leader.</p>
+        </div>
+    </div>
+</div>
+
+<div class="card" id="family">
+    <h2>❤️ My Family</h2>
+    <div style="text-align:center">
+        <div class="heart">❤️</div>
+    </div>
+    <p>
+        My family is my biggest strength.
+        I love my family very much.
+        My father is very special to me and I miss him deeply.
+        His support, love and guidance inspire me every day.
+    </p>
+</div>
+
+<div class="card">
+    <h2>✨ My First AI Project</h2>
+    <p>
+        This portfolio website is my first project created using AI assistance.
+        It represents the beginning of my journey into technology, web development,
+        creativity and innovation.
+    </p>
+</div>
+
+<div class="card" id="contact">
+    <h2>📬 Get In Touch</h2>
+    <p style="text-align:center; margin-bottom:10px;">Let's connect!</p>
+    <div class="social-row">
+        <a href="#" class="social-btn">📧 Email</a>
+        <a href="#" class="social-btn">💼 LinkedIn</a>
+        <a href="#" class="social-btn">📷 Instagram</a>
+    </div>
+</div>
+
+</section>
+
+<footer>
+    ✨ Designed with Dreams, Technology and Love ✨
+</footer>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('loader').classList.add('hide');
+    }, 600);
+});
+
+// Stars
+const starsContainer = document.getElementById('stars');
+for(let i=0;i<150;i++){
+    const star=document.createElement('div');
+    star.classList.add('star');
+    star.style.top=Math.random()*100+'%';
+    star.style.left=Math.random()*100+'%';
+    star.style.animationDuration=(Math.random()*3+2)+'s';
+    starsContainer.appendChild(star);
+}
+for(let i=0;i<5;i++){
+    const shooting=document.createElement('div');
+    shooting.classList.add('shooting-star');
+    shooting.style.animationDelay=(Math.random()*5)+'s';
+    starsContainer.appendChild(shooting);
+}
+
+// Cursor glow
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', (e) => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+});
+
+// Typing animation
+const phrases = [
+    "Aspiring Tech Entrepreneur",
+    "Fashion Photography Enthusiast",
+    "Future Innovator",
+    "Lifelong Learner"
+];
+let phraseIndex = 0, charIndex = 0, deleting = false;
+const typedEl = document.getElementById('typedText');
+
+function typeLoop(){
+    const current = phrases[phraseIndex];
+    if(!deleting){
+        typedEl.textContent = current.substring(0, charIndex + 1);
+        charIndex++;
+        if(charIndex === current.length){
+            deleting = true;
+            setTimeout(typeLoop, 1500);
+            return;
+        }
+    } else {
+        typedEl.textContent = current.substring(0, charIndex - 1);
+        charIndex--;
+        if(charIndex === 0){
+            deleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+    }
+    setTimeout(typeLoop, deleting ? 40 : 80);
+}
+typeLoop();
+
+// Scroll reveal for cards
+const cards = document.querySelectorAll('.card');
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.15 });
+cards.forEach(card => observer.observe(card));
+
+// Skill bar animation
+const skillFills = document.querySelectorAll('.skill-fill');
+const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.style.width = entry.target.dataset.width + '%';
+        }
+    });
+}, { threshold: 0.3 });
+skillFills.forEach(fill => skillObserver.observe(fill));
+</script>
+
+</body>
+</html>
